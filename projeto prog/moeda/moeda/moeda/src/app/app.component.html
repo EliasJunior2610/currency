@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Conversor de Moeda</title>
+  <style>
+    :host {
+      --primary-color: oklch(51.01% 0.274 263.83);
+      --secondary-color: oklch(53.18% 0.28 296.97);
+      --tertiary-color: oklch(47.66% 0.246 305.88);
+      --highlight-color: oklch(69.02% 0.277 332.77);
+      --danger-color: oklch(61.42% 0.238 15.34);
+      --warning-color: oklch(63.32% 0.24 31.68);
+
+      --gray-dark: oklch(19.37% 0.006 300.98);
+      --gray-medium: oklch(36.98% 0.014 302.71);
+      --gray-light: oklch(70.9% 0.015 304.04);
+
+      --vertical-gradient: linear-gradient(180deg,
+          var(--warning-color) 0%,
+          var(--highlight-color) 50%,
+          var(--secondary-color) 100%);
+
+      --horizontal-gradient: linear-gradient(90deg,
+          var(--warning-color) 0%,
+          var(--highlight-color) 50%,
+          var(--secondary-color) 100%);
+
+      --accent-color: var(--primary-color);
+
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+      box-sizing: border-box;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem;
+      margin: 1rem;
+      border: 1px solid var(--gray-light);
+      border-radius: 0.5rem;
+    }
+
+    .currency {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .currency input,
+    .currency select {
+      padding: 0.5rem;
+      border: 1px solid var(--gray-light);
+      border-radius: 0.25rem;
+      font-size: 1rem;
+    }
+
+    .swap-rate-container {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .rate {
+      font-size: 1.25rem;
+      color: var(--gray-dark);
+    }
+
+    .btn {
+      padding: 0.5rem 1rem;
+      border: none;
+      border-radius: 0.25rem;
+      background-color: var(--primary-color);
+      color: #fff;
+      cursor: pointer;
+    }
+
+    .btn:hover {
+      background-color: var(--secondary-color);
+    }
+
+    @media screen and (max-width: 650px) {
+      .container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="main">
+    <div class="container">
+      <div class="currency">
+        <input type="number" [(ngModel)]="amountOne" (input)="calculate()" placeholder="0">
+        <select [(ngModel)]="currencyOne" (change)="calculate()">
+          <option *ngFor="let currency of currencies" [value]="currency">{{currency}}</option>
+        </select>
+      </div>
+
+      <div class="swap-rate-container">
+        <div class="rate">{{rate}}</div>
+        <button class="btn" (click)="swap()">Swap</button>
+      </div>
+
+      <div class="currency">
+        <input type="number" [(ngModel)]="amountTwo" placeholder="0" disabled>
+        <select [(ngModel)]="currencyTwo" (change)="calculate()">
+          <option *ngFor="let currency of currencies" [value]="currency">{{currency}}</option>
+        </select>
+      </div>
+    </div>
+  </main>
+  <script src="currency-converter.component.ts"></script>
+</body>
+
+</html>
