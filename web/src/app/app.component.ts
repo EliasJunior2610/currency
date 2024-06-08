@@ -1,45 +1,46 @@
+// src/app/app.component.ts
 import { Component, OnInit } from '@angular/core';
+import { CurrencyService } from './service/currency.service';
 import { RouterOutlet } from '@angular/router';
-import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { CurrencyService } from './services/currency.service';
 
 @Component({
   selector: 'app-root',
-  standalone: true,
-  imports: [RouterOutlet, CommonModule, FormsModule],
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.css'], 
+  styleUrls: ['./app.component.css'],
+  imports: [RouterOutlet],
+  standalone: true,
 })
 export class AppComponent implements OnInit {
-  title = 'moeda';
-  amountOne: number = 1;
-  amountTwo: number | undefined;
-  currencyOne: string = 'USD';
-  currencyTwo: string = 'INR';
-  rate: string | undefined;
-  currencies: string[] = [
-    'AED', 'ARS', 'AUD', 'BGN', 'BRL', 'BSD', 'CAD', 'CHF', 'CLP', 'CNY', 'COP', 'CZK', 'DKK', 'DOP', 'EGP', 'EUR', 'FJD', 'GBP', 'GTQ', 'HKD', 'HRK', 'HUF', 'IDR', 'ILS', 'INR', 'ISK', 'JPY', 'KRW', 'KZT', 'MXN', 'MYR', 'NOK', 'NZD', 'PAB', 'PEN', 'PHP', 'PKR', 'PLN', 'PYG', 'RON', 'RUB', 'SAR', 'SEK', 'SGD', 'THB', 'TRY', 'TWD', 'UAH', 'USD', 'UYU', 'VND', 'ZAR',
-  ];
+  title = 'proj';
+  rate: any;
+  history: any;
 
   constructor(private currencyService: CurrencyService) {}
 
-  ngOnInit(): void {
-    this.calculate();
+  ngOnInit() {
+    this.getCurrencyRate('USD', 'EUR');
+    this.getCurrencyHistory('USD', 'EUR');
   }
 
-  calculate(): void {
-    this.currencyService
-      .getRate(this.currencyOne, this.currencyTwo)
-      .subscribe((data) => {
-        const rate = data.rate;
-        this.rate = `1 ${this.currencyOne} = ${rate} ${this.currencyTwo}`;
-        this.amountTwo = this.amountOne * rate;
-      });
+  getCurrencyRate(baseCurrency: string, targetCurrency: string) {
+    this.currencyService.getRate(baseCurrency, targetCurrency).subscribe(
+      (data) => {
+        this.rate = data;
+      },
+      (error) => {
+        console.error('Error fetching rate:', error);
+      }
+    );
   }
 
-  swap(): void {
-    [this.currencyOne, this.currencyTwo] = [this.currencyTwo, this.currencyOne];
-    this.calculate();
+  getCurrencyHistory(baseCurrency: string, targetCurrency: string) {
+    this.currencyService.getHistory(baseCurrency, targetCurrency).subscribe(
+      (data) => {
+        this.history = data;
+      },
+      (error) => {
+        console.error('Error fetching history:', error);
+      }
+    );
   }
 }
